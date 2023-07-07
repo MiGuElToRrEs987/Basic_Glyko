@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+
+#define PRODUCTOS 5
+
+// Estructura para representar un dulce mexicano
+struct DulceMexicano {
+    char nombre[50];
+    float valor;
+    int inventario;
+};
+
+// Inventario inicial de los dulces mexicanos
+struct DulceMexicano inventario[PRODUCTOS] = {
+    {"Dulce 1", 10.0, 10},
+    {"Dulce 2", 15.0, 5},
+    {"Dulce 3", 12.5, 8},
+    {"Dulce 4", 8.0, 15},
+    {"Dulce 5", 9.5, 20}
+};
+
+// Función para despachar un producto y entregar cambio
+void despacharProducto(int producto, float pago) {
+    if (producto >= 1 && producto <= PRODUCTOS) {
+        if (inventario[producto - 1].inventario > 0) {
+            if (pago >= inventario[producto - 1].valor) {
+                printf("Despachando producto: %s\n", inventario[producto - 1].nombre);
+                inventario[producto - 1].inventario--;
+
+                // Calcular y entregar cambio
+                float cambio = pago - inventario[producto - 1].valor;
+                printf("Entregando cambio: $%.2f\n", cambio);
+            } else {
+                printf("Pago insuficiente. Se requiere un pago mínimo de $%.2f\n", inventario[producto - 1].valor);
+            }
+        } else {
+            printf("Producto agotado\n");
+        }
+    } else {
+        printf("Producto inválido\n");
+    }
+}
+
+int main() {
+    int producto;
+    float pago;
+
+    printf("---- MÁQUINA EXPENDEDORA ----\n");
+    printf("Productos disponibles: %d\n", PRODUCTOS);
+
+    while (1) {
+        printf("\nIngrese el número del producto (1-%d) o ingrese 0 para salir: ", PRODUCTOS);
+        scanf("%d", &producto);
+
+        if (producto == 0) {
+            printf("¡Gracias por utilizar la máquina expendedora!\n");
+            break;
+        }
+
+        printf("Ingrese el pago: $");
+        scanf("%f", &pago);
+
+        despacharProducto(producto, pago);
+    }
+
+    return 0;
+}
